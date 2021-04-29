@@ -7,37 +7,10 @@ export default function Search() {
     const [apiKey, setApiKey] = useState(API_KEY);
     const [books, setBooks] = useState([]);
     const [result, setResult] = useState([]);
-    const [book, setBook] = useState('');
     const [searched, setSearched] = useState('');
-    
-    //Button functionalities here
-    //function buttonPressed(event) {
-        //const searchedWord = searched;
-        //const searched = event.target.value;
-        //setBook(searched);
-        //console.log(searchedWord);
-        //event.preventDefault();
-        //console.log(searched);
-        //Alert.alert('Your searched word is ' + searched);
-        //getBooks(searched);
-        //getData();
-    //}
-
-    //function handleSubmit(event) {
-    //    event.preventDefault();
-    //    console.log(searched);
-    //    fetch(
-    //        `https://www.googleapis.com/books/v1/volumes?q=${searched}&key=${apiKey}`
-    //    )
-    //    .then(data => {
-    //        console.log('Tähän asti toimii')
-    //        console.log(data);
-    //    })
-       
-    //}
-
+   
     //Hakee API:sta kirjat haetulla hakusanalla
-    //Tämä toimii toistaiseksi parhaiten. Ja tää on sit se mikä toimii myös huonoiten.
+    //Tämä toimii osittain. Hakee tiedot, mutta ne ei tallennnu bookseihin.
     const getData = async () => {
        try {
            //let response = await fetch(
@@ -55,18 +28,6 @@ export default function Search() {
            console.error(error);
        }
     };
-
-    //getBooks = () => {
-    //    fetch(
-    //        `https://www.googleapis.com/books/v1/volumes?q=${searched}&key=${apiKey}`
-    //        )
-    //    .then(response => response.json())
-    //    .then(responseJson => setBooks(responseJson.results))
-    //    .catch((error) => {
-    //        Alert.alert('Error', error);
-    //    });
-    //    console.log('Haku onnistui ' + searched);
-    //}
 
     const listSeparator = () => {
         return (
