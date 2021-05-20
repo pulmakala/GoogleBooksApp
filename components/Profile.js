@@ -1,18 +1,31 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, Platform } from 'react-native';
 import { useFonts, ReenieBeanie_400Regular } from '@expo-google-fonts/reenie-beanie';
 import Firebase, { firebaseAuth } from '../config/Firebase';
 import { useIsFocused } from "@react-navigation/native";
 import { Ionicons } from '@expo/vector-icons';
+import { Camera } from 'expo-camera';
+import * as ImagePicker from 'expo-image-picker';
+
 
 export default function Profile({ navigation }) {
     const [user, setUser] = useState({});
-    const isFocused = useIsFocused();
+    //const isFocused = useIsFocused();
+    const [image, setImage] = useState(null);
+
 
     useEffect(() => {
         userInfo();
-    }, [isFocused]);
+        (async () => {
+            if (Platform.OS !== 'web') {
+                const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+                if (status !== 'granted') {
+                    alert('Sorry, we need camera roll permissions to make this work!');
+                }
+            }
+        })();
+    }, []);
 
     //fetch the user info for profile page
     const userInfo = async () => {
@@ -27,6 +40,22 @@ export default function Profile({ navigation }) {
             console.log(error)
         }
     }
+
+    //pick image
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.cancelled) {
+            setImage(result.uri);
+        }
+    };
 
     //handle user logout
     const logout = async () => {
@@ -51,33 +80,40 @@ export default function Profile({ navigation }) {
         <View style={styles.container}>
             {/*Username*/}
             <Text style={styles.header}>{user.username}</Text>
+            <ScrollView style={styles.scrollView}>
+                {/*Profile picture comes here later*/}
+                {/*<Ionicons name="person" size={120} color="black" />*/}
+                <TouchableOpacity onPress={pickImage}>
+                    <View style={styles.button}>
+                        <Text style={styles.buttonText}>Pick an image</Text>
+                    </View>
+                    {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+                </TouchableOpacity>
 
-            {/*Profile picture comes here later*/}
-            <Ionicons name="person" size={120} color="black" />
-
-            <View style={styles.textArea}>
-                {/*Quote*/}
-                <View style={styles.quoteArea}>
-                    <Text style={styles.quote}>Reading is the sole means by which we slip,</Text>
-                    <Text style={styles.quote}>involuntarily, often helplessly,</Text>
-                    <Text style={styles.quote}>into another’s skin, another’s voice,</Text>
-                    <Text style={styles.quote}>another’s soul.</Text>
-                    <Text style={styles.quote}>- Joyce Carol Oates</Text>
+                <View style={styles.textArea}>
+                    {/*Quote*/}
+                    <View style={styles.quoteArea}>
+                        <Text style={styles.quote}>Reading is the sole means by which we slip,</Text>
+                        <Text style={styles.quote}>involuntarily, often helplessly,</Text>
+                        <Text style={styles.quote}>into another’s skin, another’s voice,</Text>
+                        <Text style={styles.quote}>another’s soul.</Text>
+                        <Text style={styles.quote}>- Joyce Carol Oates</Text>
+                    </View>
                 </View>
-            </View>
 
-            {/*Buttons*/}
-            <TouchableOpacity onPress={() => navigation.navigate('Favorites')}>
-                <View style={styles.favButton}>
-                    <Text style={styles.buttonText}>Favorites</Text>
-                </View>
-            </TouchableOpacity>
+                {/*Buttons*/}
+                <TouchableOpacity onPress={() => navigation.navigate('Favorites')}>
+                    <View style={styles.favButton}>
+                        <Text style={styles.buttonText}>Favorites</Text>
+                    </View>
+                </TouchableOpacity>
 
-            <TouchableOpacity onPress={logout}>
-                <View style={styles.button}>
-                    <Text style={styles.buttonText}>Logout</Text>
-                </View>
-            </TouchableOpacity>
+                <TouchableOpacity onPress={logout}>
+                    <View style={styles.button}>
+                        <Text style={styles.buttonText}>Logout</Text>
+                    </View>
+                </TouchableOpacity>
+            </ScrollView>
             <StatusBar style="auto" />
         </View>
     );
@@ -97,13 +133,16 @@ const styles = StyleSheet.create({
         margin: 10,
         justifyContent: 'flex-start',
     },
+    scrollView: {
+        marginHorizontal: 1,
+    },
     textArea: {
         alignContent: 'center'
     },
     quote: {
-        fontSize: 17,
+        fontSize: 14,
         fontStyle: 'italic',
-        margin: 2
+        margin: 1
     },
     quoteArea: {
         marginTop: 30
