@@ -80,40 +80,38 @@ export default function Profile({ navigation }) {
         <View style={styles.container}>
             {/*Username*/}
             <Text style={styles.header}>{user.username}</Text>
-            <ScrollView style={styles.scrollView}>
-                {/*Profile picture comes here later*/}
-                {/*<Ionicons name="person" size={120} color="black" />*/}
-                <TouchableOpacity onPress={pickImage}>
-                    <View style={styles.button}>
-                        <Text style={styles.buttonText}>Pick an image</Text>
-                    </View>
-                    {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-                </TouchableOpacity>
 
-                <View style={styles.textArea}>
-                    {/*Quote*/}
-                    <View style={styles.quoteArea}>
-                        <Text style={styles.quote}>Reading is the sole means by which we slip,</Text>
-                        <Text style={styles.quote}>involuntarily, often helplessly,</Text>
-                        <Text style={styles.quote}>into another’s skin, another’s voice,</Text>
-                        <Text style={styles.quote}>another’s soul.</Text>
-                        <Text style={styles.quote}>- Joyce Carol Oates</Text>
-                    </View>
+            {/*Profile picture comes here later*/}
+            {/*<Ionicons name="person" size={120} color="black" />*/}
+            <TouchableOpacity onPress={pickImage}>
+                <View style={styles.avatarButton}>
+                    <Text style={styles.avatarButtonText}>Pick an image</Text>
                 </View>
+                {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+            </TouchableOpacity>
 
-                {/*Buttons*/}
-                <TouchableOpacity onPress={() => navigation.navigate('Favorites')}>
-                    <View style={styles.favButton}>
-                        <Text style={styles.buttonText}>Favorites</Text>
-                    </View>
-                </TouchableOpacity>
+            <View style={styles.textArea}>
+                {/*Quote*/}
+                <View style={styles.quoteArea}>
+                    <Text style={styles.quote}>Reading is the sole means by which we slip,</Text>
+                    <Text style={styles.quote}>involuntarily, often helplessly, into another’s skin,</Text>
+                    <Text style={styles.quote}>another’s voice, another’s soul.</Text>
+                    <Text style={styles.quote}>- Joyce Carol Oates</Text>
+                </View>
+            </View>
 
-                <TouchableOpacity onPress={logout}>
-                    <View style={styles.button}>
-                        <Text style={styles.buttonText}>Logout</Text>
-                    </View>
-                </TouchableOpacity>
-            </ScrollView>
+            {/*Buttons*/}
+            <TouchableOpacity onPress={() => navigation.navigate('Favorites')}>
+                <View style={styles.favButton}>
+                    <Text style={styles.buttonText}>Favorites</Text>
+                </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={logout}>
+                <View style={styles.button}>
+                    <Text style={styles.buttonText}>Logout</Text>
+                </View>
+            </TouchableOpacity>
             <StatusBar style="auto" />
         </View>
     );
@@ -155,17 +153,31 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         margin: 10
     },
+    avatarButton: {
+        backgroundColor: '#e1701a',
+        borderRadius: 25,
+        width: 140,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: 30,
+        margin: 10
+    },
     favButton: {
         backgroundColor: '#d49d42',
         borderRadius: 25,
         width: 110,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 30
+        marginTop: 20
     },
     buttonText: {
         color: 'white',
         padding: 10,
+        fontSize: 18
+    },
+    avatarButtonText: {
+        color: 'white',
+        padding: 5,
         fontSize: 18
     }
 });
